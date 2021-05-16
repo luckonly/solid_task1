@@ -87,7 +87,8 @@ public class DefaultMenu implements MenuInterface {
 
     }
 
-    private void goToOrderMenu() {
+    @Override
+    public void goToOrderMenu() {
 
         Scanner scanner = new Scanner(System.in);
 
@@ -145,73 +146,3 @@ public class DefaultMenu implements MenuInterface {
         goToStartPage();
 
     }
-
-    private void addDeliveryOrder(String deliveryAddress) {
-
-        if (orderShop != null) {
-            OrderDelivery orderDelivery = new OrderDelivery(orderShop.getClientName(),
-                                                                deliveryAddress, orderShop);
-            shop.addDeliveryOrder(orderDelivery);
-            System.out.println("Ваш заказ успешно сформирован и передан в службу доставки. Спасибо что выбрали нас");
-
-            goToStartPage();
-
-        }
-
-
-    }
-
-    private void addItemsToTheBasket() {
-
-        scanner.nextLine();
-
-        System.out.println("Введите имя покупателя:");
-        String userName = scanner.nextLine();
-        orderShop = new OrderShop(shop, userName);
-        System.out.println("Список доступных товаров:");
-        shop.printPriceListItems();
-        System.out.println("-------------------------");
-        System.out.println("Для добавления товара в корзину укажите его номер и нужное количество (напр. 2 5). " +
-                                                        "Для завершения введите 'конец'");
-
-        while (true) {
-
-            String inputLine = scanner.nextLine();
-
-            if ("конец".equals(inputLine)) {
-                System.out.println("Подбор товара завершен");
-                orderShop.printAllItems();
-                System.out.println("Для оформления заказа нажмите клавишу ввода...");
-                scanner.nextLine();
-                break;
-            }
-
-            String[] inputArray = inputLine.split(" ");
-
-            if (inputArray.length != 2) {
-                System.out.println("Неправильный ввод. Попробуйте еще раз");
-                continue;
-            }
-
-            try {
-
-                int inputNumber = Integer.parseInt(inputArray[0]);
-                int inputQuantity = Integer.parseInt(inputArray[1]);
-
-                if (orderShop.addItem(inputNumber, inputQuantity)) {
-                    System.out.println("Успешно добавлено в корзину");
-                } else {
-                    System.out.println("Произошла ошибка при добавлении товара, проверьте введенные данные");
-                }
-
-            } catch (NumberFormatException e) {
-                System.out.println("Неправильный ввод. Попробуйте еще раз");
-                continue;
-            }
-
-        }
-
-        goToOrderMenu();
-    }
-
-}
